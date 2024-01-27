@@ -6,19 +6,29 @@ function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/users')
-    .then(response => setData(response.data))
-    .catch(error => console.error(error))
+    getAllUsers()
   }, []);
+
+  const getAllUsers = () => {
+    axios.get('http://localhost:4000/users/getAll')
+    .then(response => {
+      setData(response.data)
+    })
+    .catch(error => console.error(error))
+  }
 
   return (
     <div>
       <h1>Connection MERN</h1>
-      <ul>
-        {data.map(item => {
-          <li key={item._id}></li>
-        })}
-      </ul>
+      {
+        data.length && (
+          <ul>
+            {data.map(user => (
+              <li key={user._id}>{user.name}, {user.age}</li>
+            ))}
+        </ul>
+        )
+      }
     </div>
   )
 }
