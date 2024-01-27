@@ -13,6 +13,7 @@ app.use(express.json())
 
 app.use((req, res, next) => {
     console.log(req.path, req.method)
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     next()
 })
 
