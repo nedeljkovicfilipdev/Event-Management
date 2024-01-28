@@ -1,8 +1,14 @@
 require('dotenv').config()
 
 const express = require('express')
+const cors = require('cors')
 const mongoose = require('mongoose')
 const userRoutes = require('./routes/UserRoutes')
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+}
 
 //express app
 const app = express()
@@ -11,9 +17,10 @@ const app = express()
 
 app.use(express.json())
 
+app.use(cors(corsOptions))
+
 app.use((req, res, next) => {
     console.log(req.path, req.method)
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     next()
 })
 

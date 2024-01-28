@@ -27,6 +27,25 @@ const retrieveUser = async(req, res) => {
 
 }
 
+//Login user
+
+const loginUser = async(req, res) => {
+    const {username, password} = req.body
+
+    try{
+        const user = await User.findOne({username, password})
+
+        if(user){
+            res.status(200).json({user})
+        }else{
+            res.status(401).json({message: "Invalid credentials, or user doesn't exist"})
+        }
+    }catch(error){
+        console.log("Error during login: ", error)
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
 //CREATE user
 
 const addUser = async (req, res) => {
@@ -81,6 +100,7 @@ const updateUser = async(req, res) => {
 module.exports = {
     getAllUsers,
     retrieveUser,
+    loginUser,
     addUser,
     deleteUser,
     updateUser
