@@ -1,24 +1,17 @@
 import React, {useEffect, useState} from 'react'
-import axios from 'axios'
+import { Routes, Route } from "react-router-dom"
+import Dashboard from './components/Dashboard/main';
+import Login from './components/Login/main';
+
 
 function App() {
-  
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/users')
-    .then(response => setData(response.data))
-    .catch(error => console.error(error))
-  }, []);
 
   return (
-    <div>
-      <h1>Connection MERN</h1>
-      <ul>
-        {data.map(item => {
-          <li key={item._id}></li>
-        })}
-      </ul>
+    <div className='App'>
+      <Routes>
+        <Route path="/" element={ <Dashboard /> } />
+        <Route path="/login" element={ <Login /> } />
+      </Routes>
     </div>
   )
 }
