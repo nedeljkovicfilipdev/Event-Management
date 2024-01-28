@@ -6,24 +6,30 @@ import { Link } from 'react-router-dom';
 export default function Login() {
   const [data, setData] = useState([])
   const [showLogin, setShowLogin] = useState(false)
+  const [username, setUsername] = useState()
+  const [password, setPassword] = useState()
 
-  
-  useEffect(() => {
-    //getAllUsers()
-  }, [])
 
   const handleShowLogin = () => {
     setShowLogin(true)
   };
-/*
-  const getAllUsers = () => {
-    axios.get('http://localhost:4000/users/getAll')
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => console.error(error));
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/users/login', {
+        username: username,
+        password: password
+      }, {
+        withCredentials: true
+      });
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error during login:', error);
+      // Handle errors (e.g., display an error message to the user)
+    }
   };
-*/
+
   return (
     <div className='h-screen' style={{backgroundImage: 'url(/img/bgd-night.jpg)',backgroundSize:'cover'}}>
       <div className='bg-gray-950 flex items-center justify-between p-4'>
@@ -43,6 +49,8 @@ export default function Login() {
               id='username'
               type='text'
               placeholder='Enter your username'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div>
@@ -54,11 +62,15 @@ export default function Login() {
               id='password'
               type='password'
               placeholder='Enter your password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="flex flex-row justify-center items-center py-2 px-2">
             <button className='bg-gray-800 text-white border rounded px-2 py-2 hover:bg-blue-500 font-bold focus:outline-none focus:shadow-outline'
-              type='submit'>
+              type='button'
+              onClick={handleLogin}
+              >
               Submit
             </button>
           </div>
