@@ -1,8 +1,9 @@
 const User = require('../models/UserModel')
 const mongoose = require('mongoose')
 
-//GET user
-const getAllUsers = async (req, res) => {
+// Get users
+// GET /users/getUsers
+const getUsers = async (req, res) => {
 
     const users = await User.find({}).sort({createdAt: -1})
 
@@ -10,7 +11,7 @@ const getAllUsers = async (req, res) => {
 
 }
 //GET single user
-const retrieveUser = async(req, res) => {
+const getUser = async(req, res) => {
     const {id} = req.params
 
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -98,8 +99,8 @@ const updateUser = async(req, res) => {
 }
 
 module.exports = {
-    getAllUsers,
-    retrieveUser,
+    getUsers,
+    getUser,
     loginUser,
     addUser,
     deleteUser,
