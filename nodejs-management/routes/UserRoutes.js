@@ -3,7 +3,7 @@ const {
     getUsers,
     getUser,
     loginUser,
-    addUser,
+    registerUser,
     deleteUser,
     updateUser,
 } = require('../controllers/userController')
@@ -14,7 +14,7 @@ router.get("/getUsers", getUsers)
 
 router.post("/login", loginUser)
 
-router.post("/addUser", addUser)
+router.post("/registerUser", registerUser)
 
 router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser)
 

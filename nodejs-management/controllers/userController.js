@@ -1,4 +1,9 @@
-const User = require('../models/UserModel')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const asyncHandler = require('express-async-handler')
+
+const User = require('../models/userModel')
+
 const mongoose = require('mongoose')
 
 // Get users
@@ -30,37 +35,65 @@ const getUser = async(req, res) => {
 
 //Login user
 
-const loginUser = async(req, res) => {
+const loginUser = asyncHandler( async(req, res) => {
     const {username, password} = req.body
 
     try{
-        const user = await User.findOne({username, password})
-
-        if(user){
-            res.status(200).json({user})
-        }else{
-            res.status(401).json({message: "Invalid credentials, or user doesn't exist"})
+        //Check username
+        const user = await User.findOne({username})
+        //Check password
+        if(user && (await bcrypt.compare(password, user.password))){
+            res.json({
+                _id: user.id,
+                name: user.name,
+                email: user.email
+            })
+        }else {
+            res.status(400)
+            throw new Error('Invalid credentials')
         }
     }catch(error){
         console.log("Error during login: ", error)
         res.status(500).json({message: 'Internal server error'})
     }
-}
+})
 
-//CREATE user
+//REGISTER user
 
-const addUser = async (req, res) => {
+const registerUser =asyncHandler( async (req, res) => {
     
-    const { name, username, password, email, age} = req.body
+    const { name, username, password, email, age, phone} = req.body
 
-    try{
-        const user = await User.create({name, username, password, email, age})
-        res.status(200).json(user)
-    }catch(error) {
-        res.status(400).json(error)
+    if(!name || !username || !password || !email){
+        res.status(400)
+        throw new Error('Please add all mandatory fields')
     }
 
-}
+    const userExists = await User.findOne({email})
+
+    if(userExists){
+        res.status(400)
+        throw new Error('User already exists')
+    }
+
+    //Hash
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    try{
+        const user = await User.create({name, username, password: hashedPassword, email, age, phone})
+        if(user){
+            res.status(200).json(user)
+        }else{
+            res.status(400)
+            throw new Error('Invalid user data')
+        }
+    }catch(error) {
+        res.status(500).json(error)
+    }
+
+})
 
 //DELETE user
 const deleteUser = async(req, res) => {
@@ -102,7 +135,7 @@ module.exports = {
     getUsers,
     getUser,
     loginUser,
-    addUser,
+    registerUser,
     deleteUser,
     updateUser
 }
