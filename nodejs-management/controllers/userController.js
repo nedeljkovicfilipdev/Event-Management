@@ -17,6 +17,7 @@ const getUsers = async (req, res) => {
 }
 //GET single user
 const getUser = async(req, res) => {
+    /*
     const {id} = req.params
 
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -30,6 +31,12 @@ const getUser = async(req, res) => {
     }
 
     res.status(200).json(user)
+    */
+   const {_id, name, username, email, age} = await User.findById(req.user.id)
+   res.status(200).json({
+    id: _id,
+    name, email
+   })
 
 }
 
@@ -46,7 +53,8 @@ const loginUser = asyncHandler( async(req, res) => {
             res.json({
                 _id: user.id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                token: generateToken(user._id)
             })
         }else {
             res.status(400)
@@ -84,7 +92,10 @@ const registerUser =asyncHandler( async (req, res) => {
     try{
         const user = await User.create({name, username, password: hashedPassword, email, age, phone})
         if(user){
-            res.status(200).json(user)
+            res.status(200).json({
+                user: user,
+                token: generateToken(user._id)
+            })
         }else{
             res.status(400)
             throw new Error('Invalid user data')
@@ -129,6 +140,14 @@ const updateUser = async(req, res) => {
     }
 
     res.status(200).json(user)
+}
+
+//GENERATE Token
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET,{
+        expiresIn: '30d',
+    })
 }
 
 module.exports = {
