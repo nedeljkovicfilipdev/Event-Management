@@ -7,6 +7,7 @@ const placeSchema = new mongoose.Schema({
         ref: 'User',
     },
     name: String,
+    type: String,
     city: String,
     country: String,
     
