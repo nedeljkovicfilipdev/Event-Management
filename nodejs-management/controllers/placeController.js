@@ -40,7 +40,6 @@ const addPlace = AsyncHandler( async(req, res) =>{
 
     }
     console.log("ADD place by USER")
-    res.status(200).json("Location added.")
 })
 //UPDATE place by USER
 const updatePlace = AsyncHandler( async(req, res) =>{

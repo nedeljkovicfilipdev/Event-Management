@@ -17,21 +17,11 @@ const getUsers = async (req, res) => {
 }
 //GET single user
 const getUser = async(req, res) => {
-    /*
-    const {id} = req.params
 
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: 'No such user'})
+    if(!mongoose.Types.ObjectId.isValid(req.user.id)){
+        return res.status(401).json({error: "There is no such user"})
     }
 
-    const user = await User.findById(id)
-
-    if(!user) {
-        return res.status(404).json({error: 'There is no user with that id'})
-    }
-
-    res.status(200).json(user)
-    */
    const {_id, name, username, email, age} = await User.findById(req.user.id)
    res.status(200).json({
     id: _id,
@@ -43,6 +33,7 @@ const getUser = async(req, res) => {
 //Login user
 
 const loginUser = asyncHandler( async(req, res) => {
+    
     const {username, password} = req.body
 
     try{
