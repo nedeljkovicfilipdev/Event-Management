@@ -5,6 +5,8 @@ import { getDefaultLayout } from './components/layout'
 import HomePage from './pages/home'
 import { Explore } from './components/explore'
 import { Login } from './components/login'
+import { Register } from './components/register'
+import { AdminPanel } from './components/adminPanel'
 
 export const routerObjects: RouteObject[] = [
   {
@@ -18,6 +20,14 @@ export const routerObjects: RouteObject[] = [
   {
     path: '/login',
     Component: Login,
+  },
+  {
+    path: '/dashboard',
+    Component: AdminPanel
+  },
+  {
+    path: '/register',
+    Component: Register
   }
 ]
 

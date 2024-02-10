@@ -13,9 +13,9 @@ export function Header(props: IProps) {
 
   return (
     <div className="fixed left-0 top-0 flex w-full items-center justify-between border bg-slate-50 bg-opacity-70 px-4 py-4 md:px-12">
-      <a href="/" className="font-semiboldn text-lg">
+      <Link to="/" className="text-xl font-bold text-slate-600 hover:text-white dark:text-white">
         Event Management Application
-      </a>
+      </Link>
       <div className="flex items-center gap-4">
         <LanguageSelector />
         <Button size={'icon'} asChild className="rounded-full">
