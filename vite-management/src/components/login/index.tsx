@@ -2,10 +2,11 @@ import { Rocket, Globe2, Wrench, Zap, BookIcon, User} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../ui/button'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Login = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     username: '',
@@ -23,6 +24,10 @@ export const Login = () => {
       ...prevState,
       [e.target.name]: e.target.value
     }))
+  }
+
+  const handleRegister = () => {
+    navigate('/register')
   }
 
   const onSubmit = () => {
@@ -91,11 +96,9 @@ export const Login = () => {
         <div className="container px-4 md:px-6">
         <div className="grid items-center gap-6 py-6 bg-slate-200/50 rounded-[12px]">
           <footer className="flex justify-center  font-bold font-sans gap-1 text-2xl">
-            <Link to={'/register'}>
-            <Button type='submit' className="font-semibold gap-3 py-6 text-lg" size={'lg'}>
+            <Button onClick={handleRegister} type='submit' className="font-semibold gap-3 py-6 text-lg" size={'lg'}>
               Register
             </Button>
-            </Link>
           </footer>
         </div>
         </div>

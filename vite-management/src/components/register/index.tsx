@@ -1,12 +1,26 @@
 import { Rocket, Globe2, Wrench, Zap, BookIcon, User, UserPlus} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '../ui/button'
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { FormEvent, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaUser } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { register, reset } from 'src/features/auth/authSlice'
+import { useAppDispatch } from 'src/app/hooks'
+import { RootState } from 'src/app/store'
+
+interface UserData {
+  username: string,
+  name: string;
+  email: string;
+  password: string
+}
 
 export const Register = () => {
+  
   const { t } = useTranslation()
+
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -17,9 +31,23 @@ export const Register = () => {
 
   const {name, username, password, password2, email} = formData
 
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state: RootState) => state.auth)
+
   useEffect(() => {
-   console.log("Register..") 
-  }) 
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess) {
+      toast.success
+      navigate('/dashboard')
+      
+    }
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, dispatch]);
 
   const onChange = (e: { target: { name: any; value: any } }) => {
     setFormData((prevState) => ({
@@ -28,8 +56,21 @@ export const Register = () => {
     }))
   }
 
-  const onSubmit = () => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
+    if (password !== password2) {
+      toast.error('Passwords do not match');
+    } else {
+      const userData: UserData = {
+        username,
+        name,
+        email,
+        password,
+      };
+
+      dispatch(register(userData))
+    }
   }
 
   return (

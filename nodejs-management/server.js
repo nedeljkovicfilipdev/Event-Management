@@ -11,7 +11,7 @@ const { requestHandler } = require('./middleware/requestMiddleware')
 const connectDB = require('./config/db')
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5000',
     credentials: true,
 }
 
