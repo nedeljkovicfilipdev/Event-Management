@@ -3,21 +3,37 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '../ui/button'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAppDispatch } from 'src/app/hooks'
+import { login, reset } from 'src/features/auth/authSlice'
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 export const Login = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   })
 
-  const {username, password,} = formData
+  const {username, password} = formData
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth)
 
   useEffect(() => {
-   console.log("Login page") 
-  }) 
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess) {
+      toast.success
+      navigate('/dashboard')
+      
+    }
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, dispatch]);
 
   const onChange = (e: { target: { name: any; value: any } }) => {
     setFormData((prevState) => ({
@@ -31,7 +47,7 @@ export const Login = () => {
   }
 
   const onSubmit = () => {
-    console.log("Logging in")
+    dispatch(login(formData))
   }
 
   return (
@@ -81,7 +97,7 @@ export const Login = () => {
                     />
                   </div>
                   <div className='py-2.5'>
-                    <Button type='submit' className="font-semiboldn gap-3 py-6 text-lg" size={'lg'}>
+                    <Button type='submit' className="font-semiboldn gap-3 py-6 text-lg" size={'lg'} >
                       Submit
                     </Button>
                   </div>
