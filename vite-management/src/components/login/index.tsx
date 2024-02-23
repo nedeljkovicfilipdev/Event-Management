@@ -7,6 +7,7 @@ import { useAppDispatch } from 'src/app/hooks'
 import { login, reset } from 'src/features/auth/authSlice'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { RootState } from 'src/app/store'
 
 export const Login = () => {
   const { t } = useTranslation()
@@ -20,7 +21,7 @@ export const Login = () => {
 
   const {username, password} = formData
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth)
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state:RootState) => state.auth)
 
   useEffect(() => {
     if (isError) {
@@ -46,7 +47,7 @@ export const Login = () => {
     navigate('/register')
   }
 
-  const onSubmit = () => {
+  const handleLogin = () => {
     dispatch(login(formData))
   }
 
@@ -71,7 +72,6 @@ export const Login = () => {
           <div className="grid items-center gap-6">
             <div className="flex flex-col justify-center space-y-4 text-center">
               <section className='form  bg-slate-200/50 rounded-[12px] py-6'>
-                <form onSubmit={onSubmit}>
                   <div className='py-2.5'>
                     <input type='text' 
                     className='bg-white 
@@ -97,11 +97,10 @@ export const Login = () => {
                     />
                   </div>
                   <div className='py-2.5'>
-                    <Button type='submit' className="font-semiboldn gap-3 py-6 text-lg" size={'lg'} >
+                    <Button type='submit' className="font-semiboldn gap-3 py-6 text-lg" size={'lg'} onClick={handleLogin}>
                       Submit
                     </Button>
                   </div>
-                </form>
               </section>
             </div>
           </div>

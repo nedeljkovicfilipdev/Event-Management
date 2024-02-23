@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, reset } from 'src/features/auth/authSlice'
 import { useAppDispatch } from 'src/app/hooks'
+import { RootState } from 'src/app/store'
 
 interface IProps {
   leftNode?: ReactNode
@@ -14,9 +15,10 @@ interface IProps {
 export function Header(props: IProps) {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const {user} = useSelector((state) => state.auth)
+  const {user} = useSelector((state:RootState) => state.auth)
   
   const handleLogout= () => {
+    console.log("User is logged out!")
     dispatch(logout())
     dispatch(reset())
 
@@ -36,20 +38,17 @@ export function Header(props: IProps) {
           user ? (
             <Button size={'icon'} asChild className="rounded-full" onClick={handleLogout}>
               <Link to={'/'}>
-                Log out
                 <LogOut />
               </Link>
             </Button>
           ) : (
             <Button size={'icon'} asChild className="rounded-full" >
               <Link to={'/login'}>
-                Log in
                 <LogIn />
               </Link>
             </Button>
           )
         }
-        
       </div>
     </div>
   )
